@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Hero: React.FC = () => {
   return (
@@ -6,15 +7,41 @@ const Hero: React.FC = () => {
       <style>{`
         .hero-section {
             background-color: var(--bg-blue);
-            /* Fallback untuk browser lama */
             height: 100vh; 
-            /* Menggunakan dVH agar pas dengan layar HP modern (mengakali address bar) */
             height: 100dvh; 
             display: flex;
             flex-direction: column;
             position: relative;
-            /* Mencegah konten biru meluber/scroll berlebih ke bawah */
             overflow: hidden; 
+        }
+
+        /* --- KEYFRAMES UNTUK ANIMASI GAMBAR (ELEGAN & HALUS) --- */
+        @keyframes floatAvatar {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-2.5vh); 
+            }
+        }
+
+        /* --- AVATAR BACKGROUND --- */
+        .bg-avatar {
+            position: absolute;
+            bottom: -22vh; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 135vw; 
+            height: 125vh; 
+            opacity: 0.35; 
+            z-index: 0; 
+            pointer-events: none; 
+            animation: floatAvatar 8s ease-in-out infinite; 
+        }
+
+        .avatar-img {
+            object-fit: contain;
+            object-position: bottom center;
         }
 
         nav {
@@ -48,6 +75,7 @@ const Hero: React.FC = () => {
             border-radius: 20px;
         }
 
+        /* --- MODIFIKASI TOMBOL DOWNLOAD (SEKARANG MENJADI TAG <a>) --- */
         .hire-me {
             background: transparent;
             color: white;
@@ -57,6 +85,8 @@ const Hero: React.FC = () => {
             cursor: pointer;
             font-weight: 600;
             transition: 0.3s;
+            text-decoration: none; /* Menghilangkan garis bawah link */
+            display: inline-block; /* Memastikan padding bekerja sempurna */
         }
 
         .hire-me:hover {
@@ -86,6 +116,8 @@ const Hero: React.FC = () => {
             flex-direction: column;
             align-items: center;
             position: relative;
+            z-index: 2; 
+            margin-top: 8vh; 
         }
 
         .text-sugi {
@@ -125,8 +157,14 @@ const Hero: React.FC = () => {
 
         /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
+            .bg-avatar {
+                width: 175vw;
+                height: 100vh; 
+                opacity: 0.25; 
+                bottom: -12vh; 
+            }
+
             nav {
-                /* Mengurangi padding kiri yang tadinya 80px agar proporsional di HP */
                 padding: 20px 5%; 
             }
             
@@ -142,11 +180,12 @@ const Hero: React.FC = () => {
 
             .hero-text {
                 line-height: 0.95; 
+                margin-top: 5vh; 
             }
 
             .text-sugi {
                 font-size: 18vw; 
-                letter-spacing: -1px; /* Kurangi minus agar tidak bertumpuk */
+                letter-spacing: -1px; 
                 text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
             }
 
@@ -163,11 +202,10 @@ const Hero: React.FC = () => {
             }
 
             .custom-cursor {
-                display: none; /* Layar HP tidak butuh ikon kursor */
+                display: none; 
             }
         }
 
-        /* Untuk layar HP yang sangat kecil (seperti iPhone SE) */
         @media (max-width: 480px) {
             .text-sugi { font-size: 20vw; }
             .text-frontend, .text-dev { font-size: 22vw; }
@@ -175,12 +213,31 @@ const Hero: React.FC = () => {
       `}</style>
       
       <section className="hero-section">
+        
+        {/* --- AVATAR BACKGROUND --- */}
+        <div className="bg-avatar">
+          <Image 
+            src="/avatar.png" 
+            alt="Dhika Character" 
+            fill
+            priority
+            className="avatar-img"
+          />
+        </div>
+
         <nav>
           <div className="logo">
             <span className="sugi">Dhika</span>
             <span className="dev">DEV</span>
           </div>
-          <button className="hire-me">Download CV</button>
+         
+          <a 
+            href="/CV_Dhika.pdf" 
+            download="CV_Dhika.pdf" 
+            className="hire-me"
+          >
+            Download CV
+          </a>
         </nav>
 
         <main>

@@ -15,8 +15,8 @@ export default function HomePage() {
       <SocialSidebar />
       <Hero />
       <Features />
-      <Services />
       <Portfolio />
+      <Services />
       <Footer />
     </div>
   );

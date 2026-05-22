@@ -1,6 +1,54 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect, useRef } from 'react';
 
 const SocialSidebar: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  // Gunakan useRef untuk menyimpan timer agar bisa diakses oleh event mouse
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fungsi untuk memulai hitungan mundur 1.5 detik
+  const startHideTimer = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+    }
+    hideTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(true); // Munculkan saat scroll
+      startHideTimer();   // Mulai/reset timer
+    };
+
+    // Jalankan timer saat pertama kali web dimuat
+    startHideTimer();
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Event ketika mouse masuk ke area sidebar (Desktop)
+  const handleMouseEnter = () => {
+    setIsVisible(true); // Pastikan sidebar muncul
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current); // Hentikan timer menghilang!
+    }
+  };
+
+  // Event ketika mouse keluar dari area sidebar (Desktop)
+  const handleMouseLeave = () => {
+    startHideTimer(); // Jalankan ulang timer 1.5 detik
+  };
+
   return (
     <>
       <style>{`
@@ -13,6 +61,15 @@ const SocialSidebar: React.FC = () => {
             flex-direction: column;
             gap: 10px;
             z-index: 999; 
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .socials.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; 
         }
 
         .socials a {
@@ -90,7 +147,6 @@ const SocialSidebar: React.FC = () => {
         /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
             .socials {
-                /* Reset posisi vertikal ke bawah */
                 top: auto;
                 bottom: 25px;
                 left: 50%;
@@ -98,7 +154,6 @@ const SocialSidebar: React.FC = () => {
                 flex-direction: row;
                 gap: 15px;
                 
-                /* Efek Dock melayang (Glassmorphism) */
                 background: rgba(0, 0, 0, 0.25); 
                 padding: 10px 20px;
                 border-radius: 35px;
@@ -108,26 +163,23 @@ const SocialSidebar: React.FC = () => {
             }
 
             .socials a {
-                flex-shrink: 0; /* Mencegah tombol menjadi gepeng */
+                flex-shrink: 0; 
             }
 
             .socials a i {
-                /* Menengahkan ikon secara presisi di layar HP */
                 right: 50%;
                 transform: translateX(50%);
             }
 
-            /* Matikan efek melebar ke samping (hover text) di HP */
             .socials a:hover {
                 width: 45px; 
             }
 
             .socials a .social-text {
-                display: none; /* Sembunyikan teks sepenuhnya di HP */
+                display: none; 
             }
         }
         
-        /* Penyesuaian ekstra untuk layar HP yang lebih kecil */
         @media (max-width: 480px) {
             .socials {
                 gap: 12px;
@@ -146,7 +198,12 @@ const SocialSidebar: React.FC = () => {
         }
       `}</style>
       
-      <aside className="socials">
+      {/* Tambahkan onMouseEnter dan onMouseLeave di sini */}
+      <aside 
+        className={`socials ${isVisible ? '' : 'hidden'}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <a href="https://github.com/Andhika" target="_blank" rel="noreferrer" className="hover-blue">
           <span className="social-text">GitHub</span>
           <i className="fa-brands fa-github"></i>
