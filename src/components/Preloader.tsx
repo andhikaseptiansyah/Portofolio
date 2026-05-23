@@ -162,10 +162,6 @@ const Preloader: React.FC = () => {
 
       <div className={`preloader-container ${isExiting ? 'exit' : ''}`}>
         <div className="content-wrapper">
-          <div className="avatar-container">
-            <div className="avatar-ring"></div>
-            <img src="/avatar.png" alt="Dhika Avatar" className="preloader-avatar" />
-          </div>
           
           <div className="brand-wrapper">
             <span className="preloader-sugi">Dhika</span>
