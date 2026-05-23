@@ -7,6 +7,16 @@ const Preloader: React.FC = () => {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
+    // 1. Cek apakah pengguna sudah melihat preloader di sesi ini
+    const hasSeenPreloader = sessionStorage.getItem('hasSeenPreloader');
+    
+    if (hasSeenPreloader) {
+      // Jika sudah pernah melihat, langsung hilangkan loading tanpa animasi
+      setIsLoading(false);
+      return; 
+    }
+
+    // 2. Jika belum, jalankan animasi seperti biasa
     document.body.style.overflow = 'hidden';
 
     const exitTimer = setTimeout(() => {
@@ -16,6 +26,9 @@ const Preloader: React.FC = () => {
     const removeTimer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = '';
+      
+      // 3. Simpan data di browser bahwa pengguna sudah melewati preloader
+      sessionStorage.setItem('hasSeenPreloader', 'true');
     }, 3400);
 
     return () => {
