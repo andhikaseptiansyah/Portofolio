@@ -1,8 +1,64 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const Portfolio: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Array data untuk setiap slide (Fluensia, GoRako, GoKantin)
+  const slides = [
+    {
+      id: 1,
+      type: "image",
+      src: "/fluenesia.png",
+      alt: "Fluensia - Indonesian Language Course Platform",
+      title: "Fluensia - Indonesian Language Course Platform",
+      description: "Successfully developed and launched an online Indonesian language course platform with 40% improvement in page load speed. Built using React + Vite, TypeScript, Express.js, and Supabase with 99.9% system uptime.",
+      link: "https://frontfluensia.vercel.app/",
+    },
+    {
+      id: 2,
+      type: "video",
+      src: "/gorako.mp4",
+      poster: "/images/gorako-poster.jpg",
+      alt: "GoRako - Waste Management Campaign",
+      title: "GoRako - Waste Management Campaign",
+      description: "Developed an interactive campaign website featuring quizzes, waste-sorting games, and digital reward system. Successfully engaged 70 student visitors with 100% positive feedback rate, raising awareness about proper waste management.",
+      link: "/projects/gorako",
+    },
+    {
+      id: 3,
+      type: "image",
+      src: "/gokantin.jpeg",
+      alt: "GoKantin - Online Food Ordering Website",
+      title: "GoKantin - Online Food Ordering Website",
+      description: "Designed and developed a comprehensive food ordering website with user login, digital menu, cart system, order tracking, and admin panel. Digitized campus food ordering process for improved efficiency.",
+      link: "/projects/gokantin",
+    },
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  // Handle auto-play video saat slide berubah ke video
+  useEffect(() => {
+    const currentItem = slides[currentSlide];
+    if (currentItem.type === 'video' && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(error => {
+        console.log("Auto-play prevented:", error);
+      });
+    }
+  }, [currentSlide]);
+
+  const currentData = slides[currentSlide];
+
   return (
     <>
       <style>{`
@@ -13,7 +69,7 @@ const Portfolio: React.FC = () => {
         }
 
         /* ============================
-           TOP SECTION (FEATURED)
+           TOP SECTION
            ============================ */
         .featured-section {
             padding: 80px 5% 100px;
@@ -38,34 +94,108 @@ const Portfolio: React.FC = () => {
             display: block;
             object-fit: cover;
             aspect-ratio: 16/10;
+            transition: transform 0.5s ease;
         }
 
-        .play-btn {
+        .featured-media img:hover {
+            transform: scale(1.02);
+        }
+
+        .featured-media video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 16/10;
+        }
+
+        /* Slider container */
+        .slider-container {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Navigation arrows */
+        .slider-arrow {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--lime, #ccff00);
-            width: 70px;
-            height: 70px;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: black;
-            font-size: 24px;
-            padding-left: 5px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(204, 255, 0, 0.4);
-            transition: transform 0.3s ease;
+            font-size: 20px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .play-btn:hover {
-            transform: translate(-50%, -50%) scale(1.1);
+        .slider-arrow:hover {
+            background-color: var(--lime, #ccff00);
+            color: #111;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .slider-arrow-left {
+            left: 15px;
+        }
+
+        .slider-arrow-right {
+            right: 15px;
+        }
+
+        /* Slide dots indicator */
+        .slider-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--lime, #ccff00);
+            width: 24px;
+            border-radius: 10px;
         }
 
         .featured-content {
             flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        /* Animasi fade untuk konten */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .featured-content h2 {
@@ -84,9 +214,6 @@ const Portfolio: React.FC = () => {
             margin-bottom: 30px;
         }
 
-        /* ============================
-           TOMBOL DETAIL PROJECT
-           ============================ */
         .detail-link {
             font-size: 15px;
             font-weight: 700;
@@ -111,8 +238,24 @@ const Portfolio: React.FC = () => {
             box-shadow: 0 8px 25px rgba(204, 255, 0, 0.4); 
         }
 
+        /* Slide counter / indicator teks */
+        .slide-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 10;
+            font-family: monospace;
+        }
+
         /* ============================
-           STATS BAR (FLOATING)
+           STATS BAR
            ============================ */
         .stats-wrapper {
             position: relative;
@@ -166,12 +309,11 @@ const Portfolio: React.FC = () => {
         }
 
         /* ============================
-           BOTTOM SECTION (BLUE)
+           BOTTOM SECTION (DESKTOP)
            ============================ */
         .bottom-section {
             background-color: #1A36F6;
-            /* DIUBAH: Padding bawah 0 agar gambar menempel pas di batas bawah */
-            padding: 75px 5% 0px; 
+            padding: 75px 5% 50px;
             margin-top: -50px;
             border-radius: 40px 40px 0 0;
         }
@@ -180,18 +322,14 @@ const Portfolio: React.FC = () => {
             max-width: 1200px; 
             margin: 0 auto;
             display: flex; 
-            /* DIUBAH: Menggunakan flex-end agar konten (terutama gambar) rata bawah */
-            align-items: flex-end; 
+            align-items: center; 
             justify-content: space-between;
             gap: 50px; 
         }
 
-        /* Area Teks di Kiri */
         .bottom-text {
             flex: 1.5; 
             max-width: 700px;
-            /* DIUBAH: Memberikan jarak untuk teks agar tidak ikut turun mentok ke bawah */
-            padding-bottom: 50px; 
         }
 
         .bottom-text h2 {
@@ -206,40 +344,47 @@ const Portfolio: React.FC = () => {
             color: #ffffff;
             line-height: 1.7;
             margin-bottom: 25px; 
+            text-align: justify;
         }
 
-        /* Area Gambar di Kanan */
         .bottom-image {
-            flex: 1; 
+            flex: 0 0 240px;
+            width: 240px;
+            height: 330px; 
+            position: relative; 
             display: flex;
             justify-content: center;
+            align-items: flex-end; 
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
+            transform: translate(60px, 25px);
         }
 
-        .bottom-image img {
-            width: 100%;
-            /* DIUBAH: Memperkecil gambar avatar agar box biru tidak ikut memanjang */
-            max-width: 240px; 
-            height: auto;
-            display: block; /* Mencegah ada celah kosong di bawah gambar */
-        }
-
-        .btn-primary {
-            background-color: #ffffff;
-            color: #1A36F6;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 15px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            margin-bottom: 10px; 
-        }
-
-        .btn-primary:hover {
+        .avatar-circle-mask {
+            width: 240px;
+            height: 240px;
             background-color: var(--lime, #ccff00);
-            color: #111;
-            transform: translateY(-2px);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0; 
+            overflow: hidden; 
+            z-index: 1;
+        }
+
+        .avatar-base {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .avatar-popout {
+            width: 240px; 
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            z-index: 2;
+            clip-path: inset(0% 18% 45% 18%);
         }
 
         /* ============================
@@ -256,73 +401,172 @@ const Portfolio: React.FC = () => {
             .stats-bar {
                 flex-wrap: wrap;
                 gap: 30px;
-                padding: 30px 40px;
-                border-radius: 40px;
+                padding: 25px 20px;
+                border-radius: 30px;
                 justify-content: center;
             }
             .stat-item:not(:last-child)::after {
                 display: none;
             }
-            .stat-item {
-                flex: 1 1 40%;
+            
+            .stats-bar {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+                max-width: 500px;
+            }
+            
+            .stat-item h3 {
+                font-size: 24px;
+            }
+            
+            .stat-item p {
+                font-size: 12px;
             }
             
             .bottom-content {
                 flex-direction: column; 
                 text-align: center;
-                align-items: center; /* Di HP kembali ke center */
             }
+
+            .bottom-image {
+                order: 1; 
+                flex: 0 0 auto; 
+                width: 200px; 
+                height: 280px; 
+                margin: 0 auto 20px auto; 
+                transform: translate(0, 50px);
+            }
+
             .bottom-text {
+                order: 2; 
                 max-width: 100%;
-                padding-bottom: 30px; /* Jarak antara teks dan gambar di HP */
+                margin-top: 20px;
             }
-            .bottom-image img {
-                max-width: 200px; /* Gambar lebih dikecilkan lagi di HP */
+
+            .avatar-circle-mask {
+                width: 200px;
+                height: 200px;
+                bottom: 0;
+            }
+
+            .avatar-popout {
+                width: 200px;
+                clip-path: inset(-20% 10% 40% 10%);
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+
+            .avatar-base {
+                width: 100%;
+                bottom: -10px;
             }
         }
 
         @media (max-width: 480px) {
-            .featured-content h2 {
-                font-size: 28px;
-            }
             .stats-bar {
-                box-shadow: 0 0 0 8px #ffffff;
-                padding: 25px 20px;
+                gap: 20px;
+                padding: 20px 15px;
             }
+            
             .stat-item h3 {
-                font-size: 24px;
+                font-size: 20px;
             }
-            .bottom-section {
-                padding: 70px 5% 0px; /* Pastikan di HP juga nempel bawah */
+            
+            .stat-item p {
+                font-size: 11px;
+            }
+            
+            .bottom-image {
+                transform: translate(0, 60px);
+                height: 290px;
+            }
+            
+            .avatar-popout {
+                clip-path: inset(-25% 8% 45% 8%);
+                bottom: -15px;
+            }
+            
+            .avatar-base {
+                bottom: -15px;
+            }
+
+            .slider-arrow {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .slide-counter {
+                font-size: 10px;
+                padding: 3px 10px;
             }
         }
       `}</style>
 
       <div className="portfolio-container">
-        
-        {/* TOP SECTION */}
         <section className="featured-section">
           <div className="featured-media">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop" alt="NusaLearn Platform" />
-            <div className="play-btn">
-              <i className="fa-solid fa-play"></i>
+            <div className="slider-container">
+              {currentData.type === 'video' ? (
+                <video 
+                  ref={videoRef}
+                  key={currentSlide}
+                  src={currentData.src}
+                  poster={currentData.poster}
+                  controls
+                  playsInline
+                  autoPlay
+                  loop
+                  muted
+                />
+              ) : (
+                <img 
+                  key={currentSlide}
+                  src={currentData.src} 
+                  alt={currentData.alt} 
+                />
+              )}
+              {/* Left Arrow */}
+              <div className="slider-arrow slider-arrow-left" onClick={prevSlide}>
+                ❮
+              </div>
+              {/* Right Arrow */}
+              <div className="slider-arrow slider-arrow-right" onClick={nextSlide}>
+                ❯
+              </div>
+              {/* Dots indicator */}
+              <div className="slider-dots">
+                {slides.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`dot ${currentSlide === idx ? 'active' : ''}`}
+                    onClick={() => setCurrentSlide(idx)}
+                  />
+                ))}
+              </div>
+              {/* Slide counter */}
+              <div className="slide-counter">
+                {currentSlide + 1} / {slides.length}
+              </div>
             </div>
           </div>
           
-          <div className="featured-content">
-            <h2>Let’s Build The Next Future Digital Product</h2>
-            <p>
-              Explore the intersection of modern design and robust engineering. 
-              As a full-stack developer and designer, I build scalable digital solutions 
-              tailored to solve real-world problems.
-            </p>
-            <a href="#projects" className="detail-link">
-              Detail Project <i className="fa-solid fa-arrow-right"></i>
-            </a>
+          {/* Konten yang berubah sesuai slide */}
+          <div className="featured-content" key={currentSlide}>
+            <div className="fade-in">
+              <h2>{currentData.title}</h2>
+              <p>{currentData.description}</p>
+              <a href={currentData.link} className="detail-link" target="_blank" rel="noopener noreferrer">
+                View Detail Project
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* STATS BAR (FLOATING) */}
         <div className="stats-wrapper">
           <div className="stats-bar">
             <div className="stat-item">
@@ -330,43 +574,34 @@ const Portfolio: React.FC = () => {
               <p>Projects</p>
             </div>
             <div className="stat-item">
-              <h3>Next.js</h3>
+              <h3>React + Vite</h3>
               <p>Main Stack</p>
             </div>
             <div className="stat-item">
-              <h3>1</h3>
-              <p>Demo Web</p>
+              <h3>Supabase</h3>
+              <p>Database</p>
             </div>
             <div className="stat-item">
               <h3>Full Stack</h3>
-              <p>Web</p>
+              <p>Developer</p>
             </div>
           </div>
         </div>
 
-        {/* BOTTOM SECTION */}
         <section className="bottom-section">
           <div className="bottom-content">
-            
-            {/* Bagian Kiri: Teks */}
             <div className="bottom-text">
-              <h2>Dhika Full Stack Dev</h2>
-              <p>
-               Information Technology undergraduate student at President University with a strong foundation in web
-               development, graphic design, and cloud computing. Adept at translating business needs into functional digital
-               solutions through hands-on experience in project management and technology implementation. Eager to drive
-               impactful and innovative tech solutions.
-              </p>
+              <h2>Andhika Septiansyah</h2>
+              <p>Information Technology undergraduate student at President University with a strong foundation in web development, graphic design, and cloud computing. Adept at translating business needs into functional digital solutions through hands-on experience in project management and technology implementation. Eager to drive impactful and innovative tech solutions.</p>
             </div>
-
-            {/* Bagian Kanan: Avatar */}
             <div className="bottom-image">
-              <img src="/avatar.png" alt="Dhika Dev Avatar" />
+              <div className="avatar-circle-mask">
+                <img src="/avatar2.png" alt="Andhika" className="avatar-base" />
+              </div>
+              <img src="/avatar2.png" alt="Andhika" className="avatar-popout" />
             </div>
-
           </div>
         </section>
-
       </div>
     </>
   );

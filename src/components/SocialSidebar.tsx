@@ -204,19 +204,15 @@ const SocialSidebar: React.FC = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <a href="https://github.com/Andhika" target="_blank" rel="noreferrer" className="hover-blue">
+        <a href="https://github.com/andhikaseptiansyah" target="_blank" rel="noreferrer" className="hover-blue">
           <span className="social-text">GitHub</span>
           <i className="fa-brands fa-github"></i>
         </a>
-        <a href="https://linkedin.com/in/Andhika" target="_blank" rel="noreferrer" className="hover-blue">
+        <a href="https://www.linkedin.com/in/andhika-septiansyah" target="_blank" rel="noreferrer" className="hover-blue">
           <span className="social-text">LinkedIn</span>
           <i className="fa-brands fa-linkedin-in"></i>
         </a>
-        <a href="https://instagram.com/Andhika" target="_blank" rel="noreferrer" className="hover-lime">
-          <span className="social-text">Instagram</span>
-          <i className="fa-solid fa-camera"></i>
-        </a>
-        <a href="mailto:emailmu@gmail.com" className="hover-lime">
+        <a href="andhikaseptiansyah63@gmail.com" className="hover-lime">
           <span className="social-text">Email</span>
           <i className="fa-solid fa-envelope"></i>
         </a>

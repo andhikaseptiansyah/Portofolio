@@ -3,6 +3,9 @@ import React from 'react';
 export const metadata = {
   title: 'Dhika Dev - Portfolio',
   description: 'Full Stack Developer Portfolio',
+  icons: {
+    icon: '/avatar.png',
+  },
 };
 
 export default function RootLayout({

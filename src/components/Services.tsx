@@ -113,16 +113,16 @@ const Services: React.FC = () => {
         }
 
         .experience-card {
-            background: white;
+            background: #E8E8E8;
             border-radius: 16px;
-            padding: 20px 25px;
+            padding: 12px 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.06);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 12px;
             width: fit-content;
-            border: 1px solid #F0F0F0;
+            border: 1px solid #D0D0D0;
             transform: rotate(-3deg);
             align-self: flex-end;
             margin-top: -30px;
@@ -135,54 +135,74 @@ const Services: React.FC = () => {
         }
 
         .exp-number {
-            font-size: 45px;
+            font-size: 32px;
             font-weight: 900;
             color: var(--bg-blue);
             line-height: 1;
         }
 
         .exp-text {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            color: #888;
-            text-align: center;
-            margin-top: 5px;
+            color: #666;
+            text-align: left;
             letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+            .services-list h2 {
+                font-size: 40px;
+            }
+            .services-heading {
+                font-size: 28px;
+            }
+            .services-desc {
+                max-width: 100%;
+            }
+            .experience-card {
+                margin-top: 0;
+                align-self: flex-start;
+            }
         }
       `}</style>
 
       <section className="services-section">
         <div className="services-container">
           <div className="services-left">
-            <div className="services-subtitle">OUR SERVICES</div>
+            <div className="services-subtitle">MY SKILLS</div>
             <div className="services-list">
-              <h2>Branding</h2>
-              <h2>Web design</h2>
-              <h2>Illustration</h2>
+              <h2>Web Dev</h2>
+              <h2>AI & API</h2>
+              <h2>UI/UX</h2>
             </div>
           </div>
 
           <div className="services-right">
             <div className="services-heading">
-              Crafting digital <br /> <span className="highlight-blue">experiences</span> that matter.
+              Building <span className="highlight-blue">full-stack</span> solutions <br /> with modern tech.
             </div>
             
             <div className="services-desc">
-              Specializing in building high-performance web applications with a focus on clean code and exceptional user experience.
+              Front-end & back-end development specialist. Experienced in React, TypeScript, Express.js, and Supabase. Also skilled in AI API integration and machine learning fundamentals.
             </div>
             
             <div className="tech-stack">
-              <span className="tech-pill blue">REACT</span>
-              <span className="tech-pill lime">NEXT.JS</span>
-              <span className="tech-pill blue">TYPESCRIPT</span>
-              <span className="tech-pill lime">TAILWIND</span>
-              <span className="tech-pill blue">FRAMER MOTION</span>
-              <span className="tech-pill lime">NODE.JS</span>
+              <span className="tech-pill blue">HTML/CSS</span>
+              <span className="tech-pill lime">JavaScript</span>
+              <span className="tech-pill blue">React</span>
+              <span className="tech-pill lime">TypeScript</span>
+              <span className="tech-pill blue">PHP</span>
+              <span className="tech-pill lime">Express.js</span>
+              <span className="tech-pill blue">Supabase</span>
+              <span className="tech-pill lime">PostgreSQL</span>
+              <span className="tech-pill blue">Git/GitHub</span>
+              <span className="tech-pill lime">AI Integration</span>
             </div>
             
             <div className="experience-card">
-              <div className="exp-number">3+</div>
-              <div className="exp-text">YEARS OF<br />EXPERIENCE</div>
+              <div className="exp-number">&lt;1</div>
+              <div className="exp-text">YEAR OF<br />EXPERIENCE</div>
             </div>
           </div>
         </div>

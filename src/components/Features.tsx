@@ -1,18 +1,18 @@
 import React from 'react';
 
-const Features: React.FC = () => {
+const EducationExperience: React.FC = () => {
   return (
     <>
       <style>{`
         .features-section {
-            background-color: #ffffff; /* Diubah menjadi full putih bersih */
-            border-radius: 60px 60px 0 0; /* Ujung atas tetap melengkung (tidak lancip) */
+            background-color: #ffffff;
+            border-radius: 60px 60px 0 0;
             padding: 60px 5%; 
             display: flex;
             justify-content: center;
             gap: 40px;
             flex-wrap: wrap;
-            width: 100%; /* Memastikan kontainer menutupi layar penuh ke samping */
+            width: 100%;
             box-sizing: border-box;
             margin: 0;
         }
@@ -23,8 +23,9 @@ const Features: React.FC = () => {
             padding: 50px 30px;
             width: 100%;
             max-width: 350px;
-            height: 380px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06); /* Shadow dipertajam agar kartu terlihat di atas background putih */
+            height: auto;
+            min-height: 380px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -57,12 +58,23 @@ const Features: React.FC = () => {
             font-weight: 500;
         }
 
+        .feature-description {
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 250px;
+            text-align: center;
+        }
+
         .card-widget {
             position: relative;
             display: flex;
             justify-content: center;
             width: 100%;
             margin-bottom: 20px;
+            margin-top: 15px;
         }
 
         .widget-pill-1 {
@@ -180,26 +192,21 @@ const Features: React.FC = () => {
             line-height: 1.1;
         }
 
-        /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
             .features-section {
                 padding: 50px 20px;
-                border-radius: 40px 40px 0 0; /* Sudut kiri kanan atas dipertahankan melengkung */
-                gap: 25px; 
+                border-radius: 40px 40px 0 0;
+                gap: 25px;
                 width: 100%;
-                box-sizing: border-box; /* Mencegah elemen keluar dari lebar layar */
+                box-sizing: border-box;
             }
-
             .feature-card {
                 padding: 40px 20px;
-                height: 320px; 
-                max-width: 100%; /* Memastikan kartu penuh di dalam kontainernya */
+                max-width: 100%;
             }
-
             .feature-title {
-                font-size: 24px; 
+                font-size: 24px;
             }
-
             .feature-subtitle {
                 font-size: 12px;
             }
@@ -209,16 +216,13 @@ const Features: React.FC = () => {
             .features-section {
                 border-radius: 30px 30px 0 0;
             }
-
             .widget-pill-1 {
-                padding: 10px 45px 10px 10px; 
+                padding: 10px 45px 10px 10px;
             }
-            
             .widget-pill-2 {
                 padding: 12px 35px 12px 20px;
                 gap: 15px;
             }
-
             .widget-tag-lime {
                 font-size: 10px;
                 padding: 5px 12px;
@@ -228,32 +232,36 @@ const Features: React.FC = () => {
       `}</style>
 
       <section className="features-section">
+        {/* Kartu 1: EDUCATION */}
         <div className="feature-card">
           <div className="feature-content">
-            <div className="feature-title">BUILD<br />FAST UIS</div>
-            <div className="feature-subtitle">pixel-perfect, performant interfaces</div>
+            <div className="feature-title">🎓<br />EDUCATION</div>
+            <div className="feature-subtitle">Information Technology</div>
+            <div className="feature-description">Currently studying IT at President University, building strong foundation in web development & cloud computing.</div>
           </div>
           <div className="card-widget">
             <div className="widget-pill-1">
-              <div className="widget-avatar">👨🏾‍🦲</div>
+              <div className="widget-avatar">🏫</div>
               <div className="widget-text-group">
-                <div className="widget-name">dhika.dev</div>
-                <div className="widget-stack">React • Next.js</div>
+                <div className="widget-name">President Univ</div>
+                <div className="widget-stack">2024 - 2027</div>
               </div>
-              <div className="widget-tag-lime">TypeScript</div>
+              <div className="widget-tag-lime">S1 IT</div>
             </div>
           </div>
         </div>
 
+        {/* Kartu 2: WORK EXPERIENCE */}
         <div className="feature-card">
           <div className="feature-content">
-            <div className="feature-title">CLEAN<br />CODEBASE</div>
-            <div className="feature-subtitle">maintainable, scalable architecture</div>
+            <div className="feature-title">💼<br />EXPERIENCE</div>
+            <div className="feature-subtitle">Full Stack Developer</div>
+            <div className="feature-description">Built online course platform with React + Vite & Express.js, improving page speed by 40%.</div>
           </div>
           <div className="card-widget">
             <div className="widget-pill-2">
-              <div className="widget-tech-text">shadcn/ui</div>
-              <div className="widget-tech-text">Tailwind</div>
+              <div className="widget-tech-text">StudyFirst</div>
+              <div className="widget-tech-text">React</div>
               <div className="widget-circle-btn">
                 <i className="fa-solid fa-arrow-trend-up"></i>
               </div>
@@ -261,15 +269,17 @@ const Features: React.FC = () => {
           </div>
         </div>
 
+        {/* Kartu 3: INTERNSHIP */}
         <div className="feature-card">
           <div className="feature-content">
-            <div className="feature-title">SHIP<br />ON TIME</div>
-            <div className="feature-subtitle">reliable delivery, every sprint</div>
+            <div className="feature-title">🌟<br />PROJECTS</div>
+            <div className="feature-subtitle">GoRako · GoKantin</div>
+            <div className="feature-description">Developed waste management campaign website & campus food ordering system.</div>
           </div>
           <div className="card-widget">
             <div className="widget-bubble">
               <div className="widget-bubble-title">PROJECTS DONE</div>
-              <div className="widget-bubble-count">42+</div>
+              <div className="widget-bubble-count">2+</div>
             </div>
           </div>
         </div>
@@ -278,4 +288,4 @@ const Features: React.FC = () => {
   );
 };
 
-export default Features;
+export default EducationExperience;
