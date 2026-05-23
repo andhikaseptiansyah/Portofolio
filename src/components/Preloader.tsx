@@ -6,6 +6,16 @@ const Preloader: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
+  // Ganti 'nama-proyek' dengan nama repositori GitHub kamu
+  const repoName = 'nama-proyek';
+  
+  // Fungsi penentu path gambar otomatis
+  const getAvatarPath = () => {
+    return process.env.NODE_ENV === 'production' 
+      ? `/${repoName}/avatar.png` 
+      : '/avatar.png';
+  };
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
@@ -164,7 +174,8 @@ const Preloader: React.FC = () => {
         <div className="content-wrapper">
           <div className="avatar-container">
             <div className="avatar-ring"></div>
-            <img src="/avatar.png" alt="Dhika Avatar" className="preloader-avatar" />
+            {/* Menggunakan fungsi getAvatarPath untuk menentukan lokasi gambar */}
+            <img src={getAvatarPath()} alt="Dhika Avatar" className="preloader-avatar" />
           </div>
           
           <div className="brand-wrapper">
