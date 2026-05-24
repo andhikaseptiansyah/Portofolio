@@ -4,10 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const SocialSidebar: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
-  // Gunakan useRef untuk menyimpan timer agar bisa diakses oleh event mouse
+  const [isEmailExpanded, setIsEmailExpanded] = useState(false);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Fungsi untuk memulai hitungan mundur 1.5 detik
   const startHideTimer = () => {
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current);
@@ -19,13 +18,11 @@ const SocialSidebar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(true); // Munculkan saat scroll
-      startHideTimer();   // Mulai/reset timer
+      setIsVisible(true); 
+      startHideTimer();   
     };
 
-    // Jalankan timer saat pertama kali web dimuat
     startHideTimer();
-
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -36,17 +33,25 @@ const SocialSidebar: React.FC = () => {
     };
   }, []);
 
-  // Event ketika mouse masuk ke area sidebar (Desktop)
   const handleMouseEnter = () => {
-    setIsVisible(true); // Pastikan sidebar muncul
+    setIsVisible(true); 
     if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current); // Hentikan timer menghilang!
+      clearTimeout(hideTimerRef.current); 
     }
   };
 
-  // Event ketika mouse keluar dari area sidebar (Desktop)
   const handleMouseLeave = () => {
-    startHideTimer(); // Jalankan ulang timer 1.5 detik
+    startHideTimer(); 
+  };
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    setIsEmailExpanded(true);
+    navigator.clipboard.writeText("andhikaseptiansyah63@gmail.com");
+
+    setTimeout(() => {
+      setIsEmailExpanded(false);
+    }, 3000);
   };
 
   return (
@@ -99,7 +104,7 @@ const SocialSidebar: React.FC = () => {
             right: 12px; 
             width: 20px;
             text-align: center;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .socials a .social-text {
@@ -120,6 +125,18 @@ const SocialSidebar: React.FC = () => {
             transition-delay: 0.1s; 
         }
 
+        /* --- PERBAIKAN DI SINI --- */
+        .socials a.email-expanded,
+        .socials a.email-expanded:hover {
+            width: 300px; /* Dilebarkan dari 280px ke 300px */
+        }
+        
+        .socials a.email-expanded .social-text {
+            opacity: 1;
+            transition-delay: 0s;
+            padding-right: 32px; /* Memberi jarak aman agar teks tidak menabrak ikon */
+        }
+
         .socials a.hover-blue:hover {
             background: var(--dark-blue);
             color: white;
@@ -132,7 +149,8 @@ const SocialSidebar: React.FC = () => {
             transform: scale(0.95);
         }
 
-        .socials a.hover-lime:hover {
+        .socials a.hover-lime:hover,
+        .socials a.hover-lime.email-expanded {
             background: var(--lime);
             color: black;
             border-color: var(--lime);
@@ -153,7 +171,6 @@ const SocialSidebar: React.FC = () => {
                 transform: translateX(-50%);
                 flex-direction: row;
                 gap: 15px;
-                
                 background: rgba(0, 0, 0, 0.25); 
                 padding: 10px 20px;
                 border-radius: 35px;
@@ -178,6 +195,24 @@ const SocialSidebar: React.FC = () => {
             .socials a .social-text {
                 display: none; 
             }
+
+            /* --- PERBAIKAN MOBILE --- */
+            .socials a.email-expanded,
+            .socials a.email-expanded:hover {
+                width: 270px; /* Disesuaikan untuk mobile */
+            }
+
+            .socials a.email-expanded .social-text {
+                display: block; 
+                font-size: 11px; /* Font agak dikecilkan sedikit di HP */
+                margin-left: 10px;
+                padding-right: 28px; /* Jarak aman di mobile */
+            }
+
+            .socials a.email-expanded i {
+                right: 12px;
+                transform: none; 
+            }
         }
         
         @media (max-width: 480px) {
@@ -185,20 +220,24 @@ const SocialSidebar: React.FC = () => {
                 gap: 12px;
                 padding: 8px 15px;
             }
-            
             .socials a {
                 width: 40px;
                 height: 40px;
                 font-size: 18px;
             }
-            
             .socials a:hover {
                 width: 40px;
+            }
+            .socials a.email-expanded,
+            .socials a.email-expanded:hover {
+                width: 250px; 
+            }
+            .socials a.email-expanded .social-text {
+                font-size: 10px;
             }
         }
       `}</style>
       
-      {/* Tambahkan onMouseEnter dan onMouseLeave di sini */}
       <aside 
         className={`socials ${isVisible ? '' : 'hidden'}`}
         onMouseEnter={handleMouseEnter}
@@ -212,9 +251,16 @@ const SocialSidebar: React.FC = () => {
           <span className="social-text">LinkedIn</span>
           <i className="fa-brands fa-linkedin-in"></i>
         </a>
-        <a href="andhikaseptiansyah63@gmail.com" className="hover-lime">
-          <span className="social-text">Email</span>
-          <i className="fa-solid fa-envelope"></i>
+        
+        <a 
+          href="#" 
+          onClick={handleEmailClick}
+          className={`hover-lime ${isEmailExpanded ? 'email-expanded' : ''}`}
+        >
+          <span className="social-text">
+            {isEmailExpanded ? "andhikaseptiansyah63@gmail.com" : "Email"}
+          </span>
+          <i className={isEmailExpanded ? "fa-solid fa-check" : "fa-solid fa-envelope"}></i>
         </a>
       </aside>
     </>
